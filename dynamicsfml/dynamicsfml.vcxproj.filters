@@ -14,12 +14,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="tinyxml2.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="organism.h">
+    <Font Include="arial.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="c_cpp_properties.json" />
+    <None Include="traffic_data.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="city.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tinyxml2.h">
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>

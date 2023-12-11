@@ -1,0 +1,83 @@
+<city>
+    <buildings>
+        <building type="residential" positionX="150" positionY="150"/>
+        <building type="residential" positionX="250" positionY="150"/>
+        <building type="residential" positionX="350" positionY="150"/>
+        <building type="industrial" positionX="150" positionY="850"/>
+        <building type="industrial" positionX="250" positionY="850"/>
+        <building type="commercial" positionX="500" positionY="500"/>
+        <building type="commercial" positionX="600" positionY="500"/>
+    </buildings>
+    <roads>
+        <road id="1" length="800" positionX="100" positionY="100">
+            <lanes>
+                <lane direction="east"/>
+                <lane direction="west"/>
+            </lanes>
+        </road>
+        <road id="2" length="800" positionX="100" positionY="500">
+            <lanes>
+                <lane direction="east"/>
+                <lane direction="west"/>
+            </lanes>
+        </road>
+        <road id="3" length="800" positionX="100" positionY="900">
+            <lanes>
+                <lane direction="east"/>
+                <lane direction="west"/>
+            </lanes>
+        </road>
+        <road id="4" length="800" positionX="100" positionY="100">
+            <lanes>
+                <lane direction="south"/>
+                <lane direction="north"/>
+            </lanes>
+        </road>
+        <road id="5" length="800" positionX="500" positionY="100">
+            <lanes>
+                <lane direction="south"/>
+                <lane direction="north"/>
+            </lanes>
+        </road>
+        <road id="6" length="800" positionX="900" positionY="100">
+            <lanes>
+                <lane direction="south"/>
+                <lane direction="north"/>
+            </lanes>
+        </road>
+    </roads>
+    <intersections>
+        <intersection>
+            <roadRef id="1"/>
+            <roadRef id="4"/>
+        </intersection>
+        <intersection>
+            <roadRef id="1"/>
+            <roadRef id="5"/>
+        </intersection>
+        <intersection>
+            <roadRef id="2"/>
+            <roadRef id="4"/>
+        </intersection>
+        <intersection>
+            <roadRef id="2"/>
+            <roadRef id="5"/>
+        </intersection>
+        <intersection>
+            <roadRef id="3"/>
+            <roadRef id="4"/>
+        </intersection>
+        <intersection>
+            <roadRef id="3"/>
+            <roadRef id="5"/>
+        </intersection>
+    </intersections>
+    <cars>
+        <car positionX="120" positionY="110" direction="east"/>
+        <car positionX="220" positionY="510" direction="west"/>
+        <car positionX="500" positionY="910" direction="east"/>
+        <car positionX="110" positionY="120" direction="south"/>
+        <car positionX="510" positionY="220" direction="north"/>
+        <car positionX="910" positionY="500" direction="south"/>
+    </cars>
+</city>
