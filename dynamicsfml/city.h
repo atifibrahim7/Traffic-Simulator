@@ -63,7 +63,9 @@ public:
 class Car {
 public:
     int size;
-    pair<int, int> position;
+    pair<int, int> origin;
+    pair<int,int> destination;
+    pair<double, double> position;
     Road* currentRoad;
 };
 
@@ -354,9 +356,118 @@ std::string getRoadIdFromUser() {
 
     return roadId;
 }
+Road findClosestRoad(vector<Road> roads, pair<int, int> position)
+{
+	Road closestRoad;
+	int distance = INT_MAX;
+    int temp;
+	for (Road road : roads)
+	{
+        temp = min(abs(road.position.first - position.first), abs(road.position.second - position.second));
+        if (temp < distance)
+        {
+			distance = temp;
+			closestRoad = road;
+        }
+	}
+	return closestRoad;
 
+}
+void generateCars(City& city)
+{
+    srand(time(NULL));
+    pair<int, int> origin = city.buildings[rand() % city.buildings.size()].position;
+    pair<int, int> destination = city.buildings[rand() % city.buildings.size()].position;
+    while (origin == destination)
+        destination = city.buildings[rand() % city.buildings.size()].position;
 
-void drawCity(const City& city) {
+    Car* car = new Car();
+    car->origin= origin;
+    car->destination = destination;
+    Road* r1 = new Road(findClosestRoad(city.roads,origin));
+    car->currentRoad = r1;
+    Lane& lane = car->currentRoad->lanes[rand() % 2];
+    bool es= 0;
+    if (lane.direction == "east" || lane.direction == "west")
+    {
+        if (destination.second < origin.second)
+        {
+            es = 0;
+            car->position.first = origin.first;
+            car->position.second = car->currentRoad->position.second;
+        }
+        else
+        {
+            es = 1;
+            car->position.first = car->origin.first;
+            car->position.second = car->currentRoad->position.second + 8;
+        }
+       
+	}
+    else
+    {
+        if (destination.first < origin.first)
+        {
+            car->position.first = origin.first;
+            car->position.second = car->currentRoad->position.second;
+            es = 0;
+        }
+        else
+        {
+            car->position.first = origin.first + 8;
+            car->position.second = car->currentRoad->position.second;
+            es = 1;
+        }
+    }
+    if (car->currentRoad->carsOnRoad.size() <= 5)
+    {
+        bool flag = 0;
+        for (Car* c1 : car->currentRoad->carsOnRoad)
+        {
+			if (c1->position == car->position)
+			{
+				flag = 1;
+				break;
+			}
+        }
+        if (!flag)
+        {
+            for (Road& road : city.roads)
+            {
+				if (road.id == car->currentRoad->id)
+				{
+					road.carsOnRoad.push_back(car);
+                    if (es)
+                        road.lanes[0].carsInLane.push_back(car);
+                    else
+                        road.lanes[1].carsInLane.push_back(car);
+					break;
+				}
+            }
+        }
+    }
+}
+void moveCars(City& city)
+{
+    for (Road& road : city.roads)
+    {
+        for (Lane& lane : road.lanes)
+        {
+            for (Car* car : lane.carsInLane)
+            {
+                if (lane.direction == "east")
+                    car->position.first-=0.5;
+                else if(lane.direction == "west")
+                    car->position.first += 0.5;
+                else if (lane.direction == "south")
+                    car->position.second += 0.5;
+                else
+                    car->position.second -= 0.5;
+            }
+        }
+    }
+}
+void drawCity(City& city) {
 
     // Increase the window size to fit the map of 1000x1000
     const int windowWidth = 1200;
@@ -375,6 +486,10 @@ void drawCity(const City& city) {
     border.setFillColor(sf::Color::Green); // Set the map area to green
     border.setOutlineThickness(-5); // Negative thickness to draw inside the shape
     border.setOutlineColor(sf::Color::Black); // Set border color to b
+
+    sf::Clock clock1;
+    sf::Clock clock2;
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -429,7 +544,7 @@ void drawCity(const City& city) {
         }
         // Draw buildings
         for (const Building& building : city.buildings) {
-            sf::RectangleShape rectangle(sf::Vector2f(10, 10));
+            sf::RectangleShape rectangle(sf::Vector2f(30, 30));
             rectangle.setPosition(building.position.first, building.position.second);
             switch (building.type) {
             case Building::Type::RESIDENTIAL:
@@ -449,7 +564,6 @@ void drawCity(const City& city) {
         // Draw roads
         //DRAW INTERSECTIONS
 
-
         for (const Intersection& inters : city.intersections) {
 
             sf::RectangleShape box;
@@ -464,10 +578,24 @@ void drawCity(const City& city) {
 
 
         // Draw cars
+        float time1 = clock1.getElapsedTime().asSeconds();
+        float time2 = clock2.getElapsedTime().asSeconds();
+        if (time2 >= 3)
+        {
+            generateCars(city);
+            clock2.restart();
+        }
+        if (time1 >= 0.1)
+        {
+            moveCars(city);
+            clock1.restart();
+        }
+
+
         for (const Road& road : city.roads) {
             for (const Car* car : road.carsOnRoad) {
                 if (car) {
-                    sf::CircleShape circle(2);
+                    sf::CircleShape circle(4);
                     circle.setPosition(car->position.first, car->position.second);
                     circle.setFillColor(sf::Color::Yellow);
                     window.draw(circle);
