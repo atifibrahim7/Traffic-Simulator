@@ -121,6 +121,30 @@ public:
     vector<Building> buildings;
     vector<Road> roads;
     vector<Intersection> intersections;
+
+    void reAdjustBuildings() 
+    {
+        for (Road& road : roads)
+        {
+            for (Building& building : buildings) 
+            {
+                if (building.position.first == road.position.first)
+                {
+                    if (road.lanes->direction == "east" || road.lanes->direction == "west")
+                        building.position.second += 20;
+                    else
+                        building.position.first += 20;
+				}
+                if (building.position.second == road.position.second)
+                {
+                    if (road.lanes->direction == "east" || road.lanes->direction == "west")
+                        building.position.second += 20;
+                    else
+                        building.position.first += 20;
+                }
+            }
+        }
+	}
 };
 
 class CityLoader {
@@ -136,6 +160,7 @@ public:
         } else {
             cerr << "Could not load XML file." << endl;
         }
+        city.reAdjustBuildings();
         return city;
     }
 
@@ -328,6 +353,7 @@ std::string getRoadIdFromUser() {
 
 
 void drawCity(const City& city) {
+    
     // Increase the window size to fit the map of 1000x1000
     const int windowWidth = 1200;
     const int windowHeight = 1200;
@@ -376,6 +402,26 @@ void drawCity(const City& city) {
         // Set the view back to the moved and zoomed view for drawing the city elements
         window.setView(view);
 
+        for (const Road& road : city.roads) {
+            for (const Lane& lane : road.lanes) {
+                sf::RectangleShape line;
+                if (lane.direction == "east" || lane.direction == "west") {
+                    // Ensure the road does not exceed map width
+                    int actualLength = std::min(road.length, static_cast<int>(mapWidth - road.position.first));
+                    line = sf::RectangleShape(sf::Vector2f(actualLength, 8)); // 8 pixels thick lane
+                    line.setPosition(road.position.first, road.position.second + (lane.direction == "east" ? 0 : 8));
+                } else {
+                    // Ensure the road does not exceed map height
+                    int actualLength = std::min(road.length, static_cast<int>(mapHeight - road.position.second));
+                    line = sf::RectangleShape(sf::Vector2f(8, actualLength)); // 8 pixels thick lane
+                    line.setPosition(road.position.first + (lane.direction == "north" ? 0 : 8), road.position.second);
+                }
+                line.setFillColor(sf::Color(128, 128, 128)); // Set lane color to gray
+                line.setOutlineThickness(1); // Set border thickness
+                line.setOutlineColor(sf::Color::White); // Set border color to white
+                window.draw(line);
+            }
+        }
         // Draw buildings
         for (const Building& building : city.buildings) {
             sf::RectangleShape rectangle(sf::Vector2f(10, 10));
@@ -396,26 +442,6 @@ void drawCity(const City& city) {
 
 
         // Draw roads
-        for (const Road& road : city.roads) {
-            for (const Lane& lane : road.lanes) {
-                sf::RectangleShape line;
-                if (lane.direction == "east" || lane.direction == "west") {
-                    // Ensure the road does not exceed map width
-                    int actualLength = std::min(road.length, static_cast<int>(mapWidth - road.position.first));
-                    line = sf::RectangleShape(sf::Vector2f(actualLength, 8)); // 8 pixels thick lane
-                    line.setPosition(road.position.first, road.position.second + (lane.direction == "east" ? 0 : 12));
-                } else {
-                    // Ensure the road does not exceed map height
-                    int actualLength = std::min(road.length, static_cast<int>(mapHeight - road.position.second));
-                    line = sf::RectangleShape(sf::Vector2f(8, actualLength)); // 8 pixels thick lane
-                    line.setPosition(road.position.first + (lane.direction == "north" ? 0 : 12), road.position.second);
-                }
-                line.setFillColor(sf::Color(128, 128, 128)); // Set lane color to gray
-                line.setOutlineThickness(1); // Set border thickness
-                line.setOutlineColor(sf::Color::White); // Set border color to white
-                window.draw(line);
-            }
-        }
         //DRAW INTERSECTIONS
         
 
