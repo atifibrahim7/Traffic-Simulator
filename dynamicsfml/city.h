@@ -548,7 +548,7 @@ void drawCity(City& city) {
         }
         // Draw buildings
         for (const Building& building : city.buildings) {
-            sf::RectangleShape rectangle(sf::Vector2f(30, 30));
+            sf::RectangleShape rectangle(sf::Vector2f(25, 25));
             rectangle.setPosition(building.position.first, building.position.second);
             switch (building.type) {
             case Building::Type::RESIDENTIAL:
