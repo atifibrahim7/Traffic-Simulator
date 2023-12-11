@@ -3,16 +3,39 @@
         <building type="residential" positionX="150" positionY="150"/>
         <building type="residential" positionX="250" positionY="150"/>
         <building type="residential" positionX="350" positionY="150"/>
+		<building type="residential" positionX="550" positionY="150"/>
+		<building type="residential" positionX="650" positionY="150"/>
+		<building type="residential" positionX="550" positionY="150"/>
+		<building type="residential" positionX="100" positionY="600"/>
+		<building type="residential" positionX="100" positionY="700"/>
 		<building type="industrial" positionX="150" positionY="850"/>
 		<building type="industrial" positionX="200" positionY="850"/>
 		<building type="industrial" positionX="250" positionY="850"/>
 		<building type="industrial" positionX="300" positionY="850"/>
+		<building type="industrial" positionX="550" positionY="850"/>
+		<building type="industrial" positionX="920" positionY="700"/>
+		<building type="industrial" positionX="920" positionY="600"/>
+		<building type="industrial" positionX="920" positionY="500"/>
+		<building type="industrial" positionX="920" positionY="400"/>
+		
+		<building type="industrial" positionX="600" positionY="850"/>
+		<building type="industrial" positionX="750" positionY="850"/>
+		<building type="industrial" positionX="800" positionY="850"/>
         <building type="commercial" positionX="500" positionY="500"/>
 		<building type="commercial" positionX="600" positionY="500"/>
 		<building type="commercial" positionX="700" positionY="500"/>
-		<building type="commercial" positionX="800" positionY="440"/>
-		<building type="commercial" positionX="700" positionY="440"/>
-		<building type="commercial" positionX="600" positionY="440"/>
+		<building type="commercial" positionX="800" positionY="470"/>
+		<building type="commercial" positionX="700" positionY="470"/>
+		<building type="commercial" positionX="600" positionY="470"/>
+		<building type="commercial" positionX="400" positionY="470"/>
+		<building type="commercial" positionX="300" positionY="470"/>
+		<building type="commercial" positionX="200" positionY="470"/>
+		<building type="commercial" positionX="200" positionY="500"/>
+		<building type="commercial" positionX="300" positionY="500"/>
+		<building type="commercial" positionX="400" positionY="500"/>
+		<building type="commercial" positionX="100" positionY="300"/>
+		<building type="commercial" positionX="100" positionY="400"/>
+		<building type="commercial" positionX="100" positionY="200"/>
 
 
 
@@ -49,6 +72,12 @@
             </lanes>
         </road>
         <road id="6" length="800" positionX="900" positionY="100">
+            <lanes>
+                <lane direction="south"/>
+                <lane direction="north"/>
+            </lanes>
+        </road>
+	<road id="7" length="800" positionX="700" positionY="100">
             <lanes>
                 <lane direction="south"/>
                 <lane direction="north"/>

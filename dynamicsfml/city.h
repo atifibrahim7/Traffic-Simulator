@@ -474,6 +474,25 @@ void moveCars(City& city)
         }
     }
 }
+void deleteCars(City& city)
+{
+    for (Road& road : city.roads)
+    {
+        for (Car* car : road.carsOnRoad)
+        {
+            if (car->position.first < 0 || car->position.first > mapWidth || car->position.second < 0 || car->position.second > mapHeight) {
+                // Remove the car from the current road
+                road.carsOnRoad.erase(std::remove(road.carsOnRoad.begin(), road.carsOnRoad.end(), car), road.carsOnRoad.end());
+
+                // Free the memory allocated for the car
+                delete car;
+
+                // Set the car pointer to nullptr to avoid using a deleted pointer
+                car = nullptr;
+            }
+        }
+    }
+}
 void checkInterSections(City& city)
 {
     for (Road& road : city.roads)
@@ -700,6 +719,7 @@ void drawCity(City& city) {
             clock1.restart();
         }
         checkInterSections(city);
+     //   deleteCars(city);
 
 
         for (const Road& road : city.roads) {
