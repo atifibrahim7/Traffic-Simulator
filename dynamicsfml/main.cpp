@@ -11,6 +11,9 @@
 #include <string>
 #include <exception>
 
+float mapWidth = 1920;
+float mapHeight = 1080;
+
 using namespace tinyxml2;
 using namespace std;
 
@@ -29,22 +32,6 @@ public:
     std::string direction;
     vector<Car*> carsInLane;
 };
-
-class Intersection {
-public:
-    vector<Road*> connectedRoads;
-    pair<int, int> position; // Add position attribute
-    void calculatePosition() {
-		int x = 0;
-		int y = 0;
-        for (Road* road : connectedRoads) {
-			x += road->position.first;
-			y += road->position.second;
-		}
-		position = make_pair(x / connectedRoads.size(), y / connectedRoads.size());
-	}
-};
-
 class Road {
 public:
     int id;
@@ -53,6 +40,26 @@ public:
     Lane lanes[2];
     vector<Car*> carsOnRoad;
 };
+
+class Intersection {
+public:
+    vector<Road*> connectedRoads;
+    pair<int, int> position; // Add position attribute
+    
+    void calculatePosition() {
+		int x = 0;
+		int y = 0;
+       
+        Road* roa= connectedRoads[0];
+        Road* roa2 = connectedRoads[1];
+		x = (roa->position.first == roa2->position.first)? roa->position.first : (roa->position.first + roa->length) ;
+		y = (roa->position.second == roa2->position.second) ? roa->position.second : (roa->position.second );
+		
+        position = make_pair(x, y);
+	}
+    
+};
+
 
 class Car {
 public:
@@ -162,6 +169,7 @@ private:
                     intersection.connectedRoads.push_back(&(*it));
                 }
             }
+            intersection.calculatePosition();
             city.intersections.push_back(intersection);
         }
     }
@@ -328,8 +336,6 @@ void drawCity(const City& city) {
     sf::View view = window.getDefaultView(); // Get the default view
 
     // Define the map area dimensions and position to be 1000x1000
-    float mapWidth = 1920;
-    float mapHeight = 1080;
     float mapAreaX = (windowWidth - mapWidth) / 2;
     float mapAreaY = (windowHeight - mapHeight) / 2;
 
@@ -410,6 +416,22 @@ void drawCity(const City& city) {
                 window.draw(line);
             }
         }
+        //DRAW INTERSECTIONS
+        
+
+        for (const Intersection& inters : city.intersections) {
+
+            sf::RectangleShape box;
+            box = sf::RectangleShape(sf::Vector2f(20, 20)); // 8 pixels thick lane
+            box.setPosition(inters.position.first, inters.position.second);
+            box.setFillColor(sf::Color(128, 128, 128)); // Set lane color to gray
+            box.setOutlineThickness(1); // Set border thickness
+            box.setOutlineColor(sf::Color::White); // Set border color to white
+            window.draw(box);
+
+        }
+
+
         // Draw cars
         for (const Road& road : city.roads) {
             for (const Car* car : road.carsOnRoad) {
