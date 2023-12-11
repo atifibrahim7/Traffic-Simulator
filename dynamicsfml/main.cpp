@@ -33,6 +33,16 @@ public:
 class Intersection {
 public:
     vector<Road*> connectedRoads;
+    pair<int, int> position; // Add position attribute
+    void calculatePosition() {
+		int x = 0;
+		int y = 0;
+        for (Road* road : connectedRoads) {
+			x += road->position.first;
+			y += road->position.second;
+		}
+		position = make_pair(x / connectedRoads.size(), y / connectedRoads.size());
+	}
 };
 
 class Road {
@@ -169,6 +179,7 @@ private:
             int laneIndex = 0;
             for (XMLElement* pLane = pLanes->FirstChildElement("lane"); pLane != nullptr; pLane = pLane->NextSiblingElement("lane")) {
                 Lane lane;
+                lane.direction = pLane->Attribute("direction");
                 road.lanes[laneIndex++] = lane; // Correctly assign lane to array
                 if (laneIndex >= 2) break; // Safety check
             }
