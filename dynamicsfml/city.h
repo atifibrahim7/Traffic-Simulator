@@ -67,6 +67,7 @@ public:
     pair<int,int> destination;
     pair<double, double> position;
     Road* currentRoad;
+    string currentLane;
 };
 
 class Passenger {
@@ -392,19 +393,20 @@ void generateCars(City& city)
     car->currentRoad = r1;
     Lane& lane = car->currentRoad->lanes[rand() % 2];
     bool es= 0;
+    car->currentLane = lane.direction;
     if (lane.direction == "east" || lane.direction == "west")
     {
         if (destination.second < origin.second)
         {
             es = 0;
             car->position.first = origin.first;
-            car->position.second = car->currentRoad->position.second;
+            car->position.second = car->currentRoad->position.second + 8;
         }
         else
         {
             es = 1;
             car->position.first = car->origin.first;
-            car->position.second = car->currentRoad->position.second + 8;
+            car->position.second = car->currentRoad->position.second;
         }
        
 	}
@@ -412,13 +414,13 @@ void generateCars(City& city)
     {
         if (destination.first < origin.first)
         {
-            car->position.first = origin.first;
+            car->position.first = origin.first + 8;
             car->position.second = car->currentRoad->position.second;
             es = 0;
         }
         else
         {
-            car->position.first = origin.first + 8;
+            car->position.first = origin.first;
             car->position.second = car->currentRoad->position.second;
             es = 1;
         }
@@ -445,6 +447,7 @@ void generateCars(City& city)
                         road.lanes[0].carsInLane.push_back(car);
                     else
                         road.lanes[1].carsInLane.push_back(car);
+                    car->currentLane= road.lanes[!es].direction;
 					break;
 				}
             }
@@ -460,13 +463,115 @@ void moveCars(City& city)
             for (Car* car : lane.carsInLane)
             {
                 if (lane.direction == "east")
-                    car->position.first-=0.5;
+                    car->position.first += 1.5;
                 else if(lane.direction == "west")
-                    car->position.first += 0.5;
+                    car->position.first -= 1.5;
                 else if (lane.direction == "south")
-                    car->position.second += 0.5;
+                    car->position.second += 1.5;
                 else
-                    car->position.second -= 0.5;
+                    car->position.second -= 1.5;
+            }
+        }
+    }
+}
+void checkInterSections(City& city)
+{
+    for (Road& road : city.roads)
+    {
+        for (Car* car : road.carsOnRoad)
+        {
+            for (Intersection& inters : city.intersections)
+            {
+                if (car != 0)
+                {
+                    if (inters.position.first <= car->position.first && inters.position.first + 14 >= car->position.first && inters.position.second <= car->position.second && inters.position.second + 14 >= car->position.second)
+                    {
+                        for (Road* r : inters.connectedRoads)
+                        {
+                            if (r->id != car->currentRoad->id)
+                            {
+                                Car* c1 = new Car(*car);
+                                r->carsOnRoad.push_back(c1);
+                                road.carsOnRoad.erase(std::remove(road.carsOnRoad.begin(), road.carsOnRoad.end(), car), road.carsOnRoad.end());
+                                if (r->lanes[0].direction == "east" || r->lanes[1].direction == "west")
+                                {
+                                    if (car->destination.first < car->position.first)// sending west
+                                    {
+                                        r->lanes[1].carsInLane.push_back(c1);
+                                        if (car->currentLane == "south")
+                                        {
+                                            c1->position.first -= 105;
+                                            c1->position.second += 11;
+                                        }
+                                        else
+                                        {
+                                            c1->position.first += 5;
+                                            c1->position.second -= 8;
+                                        }
+                                        c1->currentRoad = r;
+                                        c1->currentLane = r->lanes[1].direction;
+                                    }
+                                    else// sending east
+                                    {
+                                        r->lanes[0].carsInLane.push_back(c1);
+
+                                        if (car->currentLane == "south")
+                                        {
+                                            c1->position.first = 5;
+                                            c1->position.second -= 10;
+                                        }
+                                        else
+                                        {
+                                            c1->position.first += 15;
+                                            c1->position.second -= 15;
+                                        }
+                                        c1->currentRoad = r;
+                                        c1->currentLane = r->lanes[0].direction;
+
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    if (car->destination.second > car->position.second) //sending south
+                                    {
+										r->lanes[0].carsInLane.push_back(c1);              
+                                        if (car->currentLane == "east")                    
+                                        {                                                  
+                                            c1->position.first += 8;                       
+                                            c1->position.second += 55;                     
+										}                                                  
+										else                                               
+										{                                                  
+											c1->position.first -= 1;                       
+                                            c1->position.second += 15;                     
+                                        }                                                  
+                                        c1->currentLane = r->lanes[0].direction;           
+									}
+									else// sending North
+									{
+										r->lanes[1].carsInLane.push_back(c1);
+                                        if (car->currentLane == "east")
+                                        {
+                                            c1->position.first += 1;
+											c1->position.second -= 5;
+										}
+                                        else
+                                        {
+                                            c1->position.first -= 13;
+                                            c1->position.second -= 15;
+                                        }
+                                        c1->currentLane = r->lanes[1].direction;
+                                    }
+                                }
+								c1->currentRoad = r;
+                                road.lanes[1].carsInLane.erase(std::remove(road.lanes[1].carsInLane.begin(), road.lanes[1].carsInLane.end(), car), road.lanes[1].carsInLane.end());
+                                road.lanes[0].carsInLane.erase(std::remove(road.lanes[0].carsInLane.begin(), road.lanes[0].carsInLane.end(), car), road.lanes[0].carsInLane.end());
+                                //delete car;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -589,11 +694,12 @@ void drawCity(City& city) {
             generateCars(city);
             clock2.restart();
         }
-        if (time1 >= 0.1)
+        if (time1 >= 0.01)
         {
             moveCars(city);
             clock1.restart();
         }
+        checkInterSections(city);
 
 
         for (const Road& road : city.roads) {
@@ -606,7 +712,6 @@ void drawCity(City& city) {
                 }
             }
         }
-
         window.display();
     }
 }
