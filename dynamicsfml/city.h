@@ -240,7 +240,8 @@ public:
 };
 
 
-void drawHistogram(const std::vector<int>& carCounts) {
+void drawHistogram(const std::vector<int>& carCounts) 
+{
     const int windowWidth = 800;
     const int windowHeight = 600;
     const int barWidth = windowWidth / 24;
@@ -258,7 +259,7 @@ void drawHistogram(const std::vector<int>& carCounts) {
         cerr << "Max car count is zero, nothing to draw." << endl;
         return;
     }
-
+    bool flag = 1;
     // Start the event loop
     while (window.isOpen()) {
         sf::Event event;
@@ -279,21 +280,22 @@ void drawHistogram(const std::vector<int>& carCounts) {
 
             // Display y-axis values
             sf::Text yAxisValueText(std::to_string(carCounts[i]), font, 12);
-            yAxisValueText.setPosition(i * barWidth + 2.5, windowHeight - barHeight - 5);
+            yAxisValueText.setPosition(i * barWidth + 2.5 , windowHeight - barHeight -70);
             yAxisValueText.setFillColor(sf::Color::Black);
-            window.draw(yAxisValueText);
+           window.draw(yAxisValueText);
 
             // Display y-axis label
-            sf::Text yAxisLabelText("Car Count", font, 12);
-            yAxisLabelText.setPosition((i * barWidth + 2.5) + barWidth / 2, windowHeight - barHeight - 25);
+            sf::Text yAxisLabelText("Car\nCount", font, 6);
+            yAxisLabelText.setPosition((i * barWidth + 2.5) + barWidth / 2, windowHeight - barHeight -70);
             yAxisLabelText.setFillColor(sf::Color::Black);
             window.draw(yAxisLabelText);
+            
         }
 
         // Drawing text labels on the x-axis
         for (int i = 0; i < 24; ++i) {
             sf::Text text(std::to_string(i), font, 12);
-            text.setPosition(i * barWidth, windowHeight - 50);
+            text.setPosition(i * barWidth +10, windowHeight - 50);
             text.setFillColor(sf::Color::Black);
             window.draw(text);
         }
@@ -319,11 +321,12 @@ std::string getRoadIdFromUser() {
     sf::RectangleShape inputBox;
     inputBox.setSize(sf::Vector2f(200, 50));
     inputBox.setFillColor(sf::Color::White);
-    inputBox.setPosition(50, 100);
+    inputBox.setPosition(220,50);
 
     std::string roadId;
 
     while (window.isOpen()) {
+
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -347,8 +350,9 @@ std::string getRoadIdFromUser() {
         text.setString("Enter Road ID: " + roadId);
 
         window.clear(sf::Color::Cyan);
-        window.draw(text);
         window.draw(inputBox);
+        window.draw(text);
+       
         window.display();
     }
 
