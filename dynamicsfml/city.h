@@ -503,7 +503,7 @@ void checkInterSections(City& city)
             {
                 if (car != 0)
                 {
-                    if (inters.position.first <= car->position.first && inters.position.first + 14 >= car->position.first && inters.position.second <= car->position.second && inters.position.second + 14 >= car->position.second)
+                    if (inters.position.first-5 <= car->position.first && inters.position.first + 14 >= car->position.first && inters.position.second-15 <= car->position.second && inters.position.second + 20 >= car->position.second)
                     {
                         for (Road* r : inters.connectedRoads)
                         {
@@ -519,13 +519,13 @@ void checkInterSections(City& city)
                                         r->lanes[1].carsInLane.push_back(c1);
                                         if (car->currentLane == "south")
                                         {
-                                            c1->position.first -= 105;
-                                            c1->position.second += 11;
+                                            c1->position.first = inters.position.first - 30;
+                                            c1->position.second = inters.position.second + 8;
                                         }
                                         else
                                         {
-                                            c1->position.first += 5;
-                                            c1->position.second -= 8;
+                                            c1->position.first = inters.position.first - 30;
+                                            c1->position.second = inters.position.second + 8;
                                         }
                                         c1->currentRoad = r;
                                         c1->currentLane = r->lanes[1].direction;
@@ -536,13 +536,13 @@ void checkInterSections(City& city)
 
                                         if (car->currentLane == "south")
                                         {
-                                            c1->position.first = 5;
-                                            c1->position.second -= 10;
+                                            c1->position.first = inters.position.first + 30;
+                                            c1->position.second = inters.position.second;
                                         }
                                         else
                                         {
-                                            c1->position.first += 15;
-                                            c1->position.second -= 15;
+                                            c1->position.first = inters.position.first + 30;
+                                            c1->position.second = inters.position.second;
                                         }
                                         c1->currentRoad = r;
                                         c1->currentLane = r->lanes[0].direction;
@@ -557,13 +557,13 @@ void checkInterSections(City& city)
 										r->lanes[0].carsInLane.push_back(c1);              
                                         if (car->currentLane == "east")                    
                                         {                                                  
-                                            c1->position.first += 8;                       
-                                            c1->position.second += 55;                     
+                                            c1->position.first = inters.position.first + 8;
+                                            c1->position.second = inters.position.second + 30;
 										}                                                  
 										else                                               
 										{                                                  
-											c1->position.first -= 1;                       
-                                            c1->position.second += 15;                     
+                                            c1->position.first = inters.position.first + 8;
+                                            c1->position.second = inters.position.second + 30;
                                         }                                                  
                                         c1->currentLane = r->lanes[0].direction;           
 									}
@@ -572,13 +572,13 @@ void checkInterSections(City& city)
 										r->lanes[1].carsInLane.push_back(c1);
                                         if (car->currentLane == "east")
                                         {
-                                            c1->position.first += 1;
-											c1->position.second -= 5;
+                                            c1->position.first = inters.position.first;
+											c1->position.second = inters.position.second -30;
 										}
                                         else
                                         {
-                                            c1->position.first -= 13;
-                                            c1->position.second -= 15;
+                                            c1->position.first = inters.position.first;
+                                            c1->position.second = inters.position.second - 30;
                                         }
                                         c1->currentLane = r->lanes[1].direction;
                                     }
