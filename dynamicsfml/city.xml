@@ -3,11 +3,20 @@
         <building type="residential" positionX="150" positionY="150"/>
         <building type="residential" positionX="250" positionY="150"/>
         <building type="residential" positionX="350" positionY="150"/>
-        <building type="industrial" positionX="150" positionY="850"/>
-        <building type="industrial" positionX="250" positionY="850"/>
+		<building type="industrial" positionX="150" positionY="850"/>
+		<building type="industrial" positionX="200" positionY="850"/>
+		<building type="industrial" positionX="250" positionY="850"/>
+		<building type="industrial" positionX="300" positionY="850"/>
         <building type="commercial" positionX="500" positionY="500"/>
-        <building type="commercial" positionX="600" positionY="500"/>
-    </buildings>
+		<building type="commercial" positionX="600" positionY="500"/>
+		<building type="commercial" positionX="700" positionY="500"/>
+		<building type="commercial" positionX="800" positionY="480"/>
+		<building type="commercial" positionX="700" positionY="480"/>
+		<building type="commercial" positionX="600" positionY="480"/>
+
+
+
+	</buildings>
     <roads>
         <road id="1" length="800" positionX="100" positionY="100">
             <lanes>

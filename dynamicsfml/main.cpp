@@ -29,12 +29,15 @@ int main() {
                 drawCity(simulation.city);
             } else if (choice == 2) {
                 // Ask for the road ID
+               //gets input from user for road input
                 std::string roadIdStr = getRoadIdFromUser();
                 int roadId = std::stoi(roadIdStr);
 
                 // Set the entered road ID for analysis
+               //Validates if the road id entered is present in the city
                 auto it = std::find_if(simulation.city.roads.begin(), simulation.city.roads.end(), [roadId](const Road& r) { return r.id == roadId; });
                 if (it != simulation.city.roads.end()) {
+                    //if found with the inputted id ,  run analysis
                     simulation.trafficAnalysis.setRoadForAnalysis(&(*it));
                 } else {
                     std::cerr << "No road found with the entered ID." << std::endl;
