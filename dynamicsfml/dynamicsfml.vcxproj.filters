@@ -14,8 +14,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,10 +35,7 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Source files</Filter>
     </ClInclude>
-    <ClInclude Include="citycontents.h">
-      <Filter>Source files</Filter>
-    </ClInclude>
-    <ClInclude Include="simulation.h">
+    <ClInclude Include="city.h">
       <Filter>Source files</Filter>
     </ClInclude>
   </ItemGroup>

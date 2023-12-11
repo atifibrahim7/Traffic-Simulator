@@ -33,8 +33,7 @@
     <Xml Include="city.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="citycontents.h" />
-    <ClInclude Include="simulation.h" />
+    <ClInclude Include="city.h" />
     <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
