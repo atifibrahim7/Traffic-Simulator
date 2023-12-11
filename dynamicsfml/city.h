@@ -483,9 +483,10 @@ void deleteCars(City& city)
             if (car->position.first < 0 || car->position.first > mapWidth || car->position.second < 0 || car->position.second > mapHeight) {
                 // Remove the car from the current road
                 road.carsOnRoad.erase(std::remove(road.carsOnRoad.begin(), road.carsOnRoad.end(), car), road.carsOnRoad.end());
-
-                // Free the memory allocated for the car
+                road.lanes[0].carsInLane.erase(std::remove(road.lanes[0].carsInLane.begin(), road.lanes[0].carsInLane.end(), car), road.lanes[0].carsInLane.end());
+                road.lanes[1].carsInLane.erase(std::remove(road.lanes[1].carsInLane.begin(), road.lanes[1].carsInLane.end(), car), road.lanes[1].carsInLane.end());
                 delete car;
+                // Free the memory allocated for the car
 
                 // Set the car pointer to nullptr to avoid using a deleted pointer
                 car = nullptr;
@@ -594,6 +595,25 @@ void checkInterSections(City& city)
             }
         }
     }
+}
+void destinationCheck(City& city)
+{
+	for (Road& road : city.roads)
+	{
+		for (Car* car : road.carsOnRoad)
+		{
+			if (car != 0)
+			{
+				if (abs(car->destination.first -  car->position.first) <=70 && abs(car->destination.second == car->position.second) <=70)
+				{
+					road.carsOnRoad.erase(std::remove(road.carsOnRoad.begin(), road.carsOnRoad.end(), car), road.carsOnRoad.end());
+                    road.lanes[0].carsInLane.erase(std::remove(road.lanes[0].carsInLane.begin(), road.lanes[0].carsInLane.end(), car), road.lanes[0].carsInLane.end());
+                    road.lanes[1].carsInLane.erase(std::remove(road.lanes[1].carsInLane.begin(), road.lanes[1].carsInLane.end(), car), road.lanes[1].carsInLane.end());
+					delete car;
+				}
+			}
+		}
+	}
 }
 void drawCity(City& city) {
 
@@ -719,8 +739,8 @@ void drawCity(City& city) {
             clock1.restart();
         }
         checkInterSections(city);
-     //   deleteCars(city);
-
+        destinationCheck(city);
+        deleteCars(city);
 
         for (const Road& road : city.roads) {
             for (const Car* car : road.carsOnRoad) {
