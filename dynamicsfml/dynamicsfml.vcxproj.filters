@@ -33,5 +33,11 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Source files</Filter>
     </ClInclude>
+    <ClInclude Include="citycontents.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation.h">
+      <Filter>Source files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
